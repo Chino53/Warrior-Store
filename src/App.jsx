@@ -1,32 +1,37 @@
-import { useEffect, useState } from "react";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { useState, useEffect } from "react";
+import axios from "axios";
+
+import Navbar from "./components/Navbar";
+import Home from "./pages/Home";
+import Login from "./pages/Login";
+import Register from "./pages/Register";
+import Cart from "./pages/Cart";
+
 import "./App.css";
 
 function App() {
-  const [productos, setProductos] = useState([]);
+  // Estado global para manejar el usuario actual
+  const [user, setUser] = useState(null);
 
+  // Ejemplo de conexión inicial al backend
   useEffect(() => {
-    fetch("http://localhost:5000/api/productos") // tu backend Node
-      .then((res) => res.json())
-      .then((data) => setProductos(data))
-      .catch((err) => console.error("Error al obtener productos:", err));
+    axios.get("http://localhost:5000/api/test")
+      .then(res => console.log("✅ Conectado con backend:", res.data))
+      .catch(err => console.error("❌ Error al conectar con backend:", err));
   }, []);
 
   return (
-    <div className="App">
-      <h1>🛒 Warrior Store</h1>
-      <h2>Lista de productos</h2>
-      <ul>
-        {productos.length > 0 ? (
-          productos.map((p) => (
-            <li key={p.id}>
-              <strong>{p.nombre}</strong> — ${p.precio}
-            </li>
-          ))
-        ) : (
-          <p>Cargando productos...</p>
-        )}
-      </ul>
-    </div>
+    <Router>
+      <Navbar user={user} setUser={setUser} />
+
+      <Routes>
+        <Route path="/" element={<Home />} />
+        <Route path="/login" element={<Login setUser={setUser} />} />
+        <Route path="/register" element={<Register />} />
+        <Route path="/cart" element={<Cart user={user} />} />
+      </Routes>
+    </Router>
   );
 }
 
