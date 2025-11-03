@@ -1,39 +1,59 @@
 import { useState } from "react";
-import api from "../api";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-function Register() {
-  const [form, setForm] = useState({ name: "", email: "", password: "" });
+const Register = () => {
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = async (e) => {
+  const handleRegister = async (e) => {
     e.preventDefault();
     try {
-      await api.post("/users/register", form);
-      alert("✅ Usuario registrado correctamente");
+      await axios.post("http://localhost:5000/api/register", {
+        name,
+        email,
+        password,
+      });
+      navigate("/login");
     } catch (err) {
-      alert("❌ Error al registrar usuario");
+      console.error("Error al registrar usuario:", err);
+      setError("No se pudo registrar. Intenta con otro correo.");
     }
   };
 
   return (
-    <form onSubmit={handleSubmit}>
-      <h2>Registro</h2>
-      <input
-        placeholder="Nombre"
-        onChange={(e) => setForm({ ...form, name: e.target.value })}
-      />
-      <input
-        placeholder="Email"
-        type="email"
-        onChange={(e) => setForm({ ...form, email: e.target.value })}
-      />
-      <input
-        placeholder="Contraseña"
-        type="password"
-        onChange={(e) => setForm({ ...form, password: e.target.value })}
-      />
-      <button type="submit">Registrarse</button>
-    </form>
+    <div className="register-container">
+      <h2>Crear cuenta</h2>
+      <form onSubmit={handleRegister}>
+        <input
+          type="text"
+          placeholder="Nombre"
+          value={name}
+          onChange={(e) => setName(e.target.value)}
+          required
+        />
+        <input
+          type="email"
+          placeholder="Correo electrónico"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <input
+          type="password"
+          placeholder="Contraseña"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <button type="submit">Registrarse</button>
+      </form>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+    </div>
   );
-}
+};
 
 export default Register;
