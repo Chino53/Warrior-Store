@@ -1,25 +1,16 @@
 import express from "express";
-import mysql from "mysql2";
+import cors from "cors";
+import connection from "./config/db.js";
+import userRoutes from "./routes/users.js";
+import productRoutes from "./routes/products.js";
+import cartRoutes from "./routes/cart.js";
 
 const app = express();
-const PORT = 5000;
+app.use(cors());
+app.use(express.json());
 
-const db = mysql.createConnection({
-  host: "localhost",
-  user: "warrior", // 👈 nuevo usuario
-  password: "1234", // 👈 su contraseña
-  database: "warrior_store",
-  port: 3306,
-});
+app.use("/api/users", userRoutes);
+app.use("/api/products", productRoutes);
+app.use("/api/cart", cartRoutes);
 
-db.connect((err) => {
-  if (err) {
-    console.error("Error al conectar a MySQL:", err);
-    return;
-  }
-  console.log("✅ Conexión exitosa a MySQL");
-});
-
-app.listen(PORT, () => {
-  console.log(`Servidor corriendo en puerto ${PORT}`);
-});
+app.listen(5000, () => console.log("Servidor corriendo en puerto 5000"));
