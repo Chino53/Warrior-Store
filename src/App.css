@@ -1,44 +1,18 @@
-.home-container {
-  padding: 2rem;
-  text-align: center;
-}
-
-.product-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-  margin-top: 2rem;
-}
-
-.product-card {
-  background-color: #fff;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  padding: 1rem;
-  transition: transform 0.2s ease;
-}
-
-.product-card:hover {
-  transform: scale(1.05);
-}
-
-.product-card img {
+html, body, #root {
+  height: 100%;
   width: 100%;
-  height: 220px;
-  object-fit: cover;
-  border-radius: 10px;
+  margin: 0;
+  padding: 0;
 }
 
-.product-card button {
-  margin-top: 10px;
-  background-color: #111;
-  color: white;
-  border: none;
-  padding: 10px 15px;
-  border-radius: 6px;
-  cursor: pointer;
+body {
+  font-family: "Poppins", sans-serif;
+  background-color: #fafafa;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh; /* asegura que ocupe todo el alto */
 }
 
-.product-card button:hover {
-  background-color: #333;
+main {
+  flex: 1; /* empuja el footer hacia abajo */
 }

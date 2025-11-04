@@ -18,7 +18,7 @@ const Navbar = () => {
           WARRIOR<span>STORE</span>
         </Link>
 
-        {/* Links */}
+        {/* Links principales */}
         <nav className="nav-links">
           <Link to="/">Inicio</Link>
           <Link to="/shop">Tienda</Link>
@@ -29,17 +29,23 @@ const Navbar = () => {
         <div className="nav-actions">
           {user ? (
             <>
-              <span className="user-name">Hola, {user.name}</span>
+              <span className="user-name">👋 Hola, {user.name}</span>
               <button onClick={logout} className="btn-logout">
                 Cerrar sesión
               </button>
             </>
           ) : (
-            <Link to="/login" className="btn-login">
-              Iniciar sesión
-            </Link>
+            <>
+              <Link to="/login" className="btn-login">
+                Iniciar sesión
+              </Link>
+              <Link to="/register" className="btn-register">
+                Registrarse
+              </Link>
+            </>
           )}
 
+          {/* Carrito */}
           <Link to="/cart" className="cart-icon">
             🛒
             {totalItems > 0 && <span className="cart-count">{totalItems}</span>}

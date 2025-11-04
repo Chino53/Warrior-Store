@@ -1,6 +1,6 @@
 /* ===== NAVBAR ===== */
 .navbar {
-  background-color: white;
+  background-color: rgb(0, 0, 0);
   border-bottom: 1px solid #eee;
   position: sticky;
   top: 0;
@@ -20,7 +20,7 @@
 .nav-logo {
   font-size: 1.6rem;
   font-weight: 800;
-  color: black;
+  color: rgb(255, 255, 255);
   text-decoration: none;
   letter-spacing: 1px;
 }
@@ -36,7 +36,7 @@
 }
 
 .nav-links a {
-  color: #111;
+  color: #ffffff;
   text-decoration: none;
   font-weight: 500;
   transition: color 0.2s ease;
@@ -57,7 +57,7 @@
   border: none;
   background: none;
   font-weight: 600;
-  color: #111;
+  color: #ffffff;
   cursor: pointer;
   transition: color 0.2s ease;
 }
@@ -78,9 +78,22 @@
   position: absolute;
   top: -8px;
   right: -10px;
-  background-color: black;
-  color: white;
+  background-color: rgb(16, 136, 22);
+  color: rgb(0, 0, 0);
   border-radius: 50%;
   font-size: 0.75rem;
   padding: 2px 6px;
+}
+
+.btn-register{
+  border: none;
+  background: none;
+  font-weight: 600;
+  color: #ffffff;
+  cursor: pointer;
+  transition: color 0.2s ease;
+}
+
+.btn-register:hover{
+  color: #888;
 }

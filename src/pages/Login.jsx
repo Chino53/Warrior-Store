@@ -2,58 +2,71 @@ import { useState, useContext } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../context/UserContext";
+import "./Auth.css";
 
 const Login = () => {
-  const { setUser } = useContext(UserContext);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
   const navigate = useNavigate();
+  const { login } = useContext(UserContext) || {}; // Evita errores si el contexto no está disponible
 
-  const handleLogin = async (e) => {
+  const [form, setForm] = useState({ email: "", password: "" });
+  const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
+
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setLoading(true);
+
     try {
-      const res = await axios.post("http://localhost:5000/api/login", {
-        email,
-        password,
-      });
+      // 🔹 Intentar login en el backend
+      const res = await axios.post("http://localhost:5000/api/users/login", form);
 
-      // Guardar usuario en el contexto global
-      setUser(res.data.user);
+      // 🔹 Si hay contexto, guarda el usuario
+      if (login) login(res.data.user);
 
-      // Si el backend devuelve un token, podés guardarlo también
-      if (res.data.token) {
-        localStorage.setItem("token", res.data.token);
-      }
-
-      navigate("/"); // Redirige al home
+      alert(`✅ Bienvenido, ${res.data.user.name || "usuario"}!`);
+      navigate("/");
     } catch (err) {
       console.error("Error al iniciar sesión:", err);
-      setError("Credenciales incorrectas o error del servidor");
+      const message = err.response?.data?.message || "❌ Credenciales inválidas o error en el servidor.";
+      setError(message);
+      alert(message);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <div className="login-container">
+    <div className="auth-container">
       <h2>Iniciar sesión</h2>
-      <form onSubmit={handleLogin}>
+      <form onSubmit={handleSubmit}>
         <input
           type="email"
+          name="email"
           placeholder="Correo electrónico"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
+          value={form.email}
+          onChange={handleChange}
           required
         />
         <input
           type="password"
+          name="password"
           placeholder="Contraseña"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
+          value={form.password}
+          onChange={handleChange}
           required
         />
-        <button type="submit">Entrar</button>
+
+        <button type="submit" disabled={loading}>
+          {loading ? "Entrando..." : "Entrar"}
+        </button>
+
+        {error && <p className="error">{error}</p>}
       </form>
-      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 };

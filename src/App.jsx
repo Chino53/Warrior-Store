@@ -9,8 +9,8 @@ import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 import Cart from "./pages/Cart";
-// Si todavía no creaste ProductDetail.jsx, no pasa nada — podés comentarlo o crearlo después
-import ProductDetail from "./pages/ProductDetail";
+// 🔹 Importa ProductDetail solo si existe, o mantenelo comentado para evitar errores.
+// import ProductDetail from "./pages/ProductDetail";
 
 import { UserProvider } from "./context/UserContext";
 import { CartProvider } from "./context/CartContext";
@@ -18,7 +18,7 @@ import { CartProvider } from "./context/CartContext";
 import "./App.css";
 
 function App() {
-  // Prueba de conexión con backend
+  // 🔹 Prueba de conexión con backend
   useEffect(() => {
     axios
       .get("http://localhost:5000/api/test")
@@ -37,7 +37,8 @@ function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/cart" element={<Cart />} />
-            <Route path="/product/:id" element={<ProductDetail />} />
+            {/* 🔹 Descomentá esta línea cuando crees ProductDetail.jsx */}
+            {/* <Route path="/product/:id" element={<ProductDetail />} /> */}
           </Routes>
 
           <Footer />
