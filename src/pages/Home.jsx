@@ -1,6 +1,8 @@
 import { useEffect, useState, useContext } from "react";
 import axios from "axios";
+import { Link } from "react-router-dom";
 import { CartContext } from "../context/CartContext";
+import "./Home.css";
 
 const Home = () => {
   const [products, setProducts] = useState([]);
@@ -9,46 +11,36 @@ const Home = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        // Intentamos traer productos reales desde el backend
         const res = await axios.get("http://localhost:5000/api/products");
         setProducts(res.data);
-        console.log("✅ Productos cargados desde backend");
-      } catch (err) {
-        console.warn("⚠️ No se pudo conectar con backend, usando productos mock.");
-        // Si el backend no responde, usamos datos simulados
-        const mockProducts = [
+      } catch {
+        // Datos simulados si no hay backend
+        setProducts([
           {
             id: 1,
-            name: "Remera Warrior",
-            price: 8000,
-            image: "data:image/jpeg;base64,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",
+            name: "Remera Warrior Basic",
+            price: 8900,
+            image: "https://via.placeholder.com/500x600?text=Remera+Warrior",
           },
           {
             id: 2,
-            name: "Buzo Street",
-            price: 15000,
-            image: "data:image/jpeg;base64,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",
+            name: "Buzo Oversize Street",
+            price: 17500,
+            image: "https://via.placeholder.com/500x600?text=Buzo+Street",
           },
           {
             id: 3,
-            name: "Campera Premium",
-            price: 28000,
-            image: "https://acdn-us.mitiendanube.com/stores/103/133/products/camp-andes-h-ne-ro-1c8fa0984a7f3aafa117480241841868-480-0.webp",
+            name: "Campera Urban Fit",
+            price: 25900,
+            image: "https://via.placeholder.com/500x600?text=Campera+Urban",
           },
           {
             id: 4,
-            name: "Jogging Urban",
-            price: 12000,
-            image: "https://acdn-us.mitiendanube.com/stores/001/661/615/products/7b91b081-0b2b-419e-9c2a-2ea7640f4d10-0d724e76040559e20717337973965935-640-0.webp",
+            name: "Jogging Premium",
+            price: 14900,
+            image: "https://via.placeholder.com/500x600?text=Jogging+Premium",
           },
-          {
-            id: 5,
-            name: "Gorra Warrior",
-            price: 6000,
-            image: "https://www.newera.com.ar/cdn/shop/files/11591122_59FIFTY_MELTON_NEYYAN_SCA_3QL.jpg?v=1746047082&width=840",
-          },
-        ];
-        setProducts(mockProducts);
+        ]);
       }
     };
 
@@ -56,25 +48,36 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="home-container">
-      <h2>🧢 Productos de Warrior Store</h2>
+    <div className="home">
+      {/* Hero principal */}
+      <section className="hero">
+        <div className="hero-text">
+          <h1>Warrior Store</h1>
+          <p>Ropa urbana para quienes marcan su propio camino.</p>
+          <Link to="/shop" className="btn-primary">
+            Ver colección
+          </Link>
+        </div>
+      </section>
 
-      {products.length === 0 ? (
-        <p>Cargando productos...</p>
-      ) : (
+      {/* Sección de productos */}
+      <section className="product-section">
+        <h2 className="section-title">Nuevos ingresos</h2>
         <div className="product-grid">
           {products.map((product) => (
             <div key={product.id} className="product-card">
-              <img src={product.image} alt={product.name} />
-              <h3>{product.name}</h3>
-              <p>${product.price}</p>
-              <button onClick={() => addToCart(product)}>
-                Agregar al carrito
-              </button>
+              <Link to={`/product/${product.id}`}>
+                <img src={product.image} alt={product.name} />
+              </Link>
+              <div className="info">
+                <h3>{product.name}</h3>
+                <p>${product.price}</p>
+                <button onClick={() => addToCart(product)}>Agregar</button>
+              </div>
             </div>
           ))}
         </div>
-      )}
+      </section>
     </div>
   );
 };
